@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # Simple LaunchPad Bug object used to store some informations from LaunchPad
 # into a structure that can be stored in and out of a json file
 
@@ -123,5 +122,3 @@ class lp_bug():
         dict['packages'] = self.packages_info
 
         return dict
-
-# =============================================================================

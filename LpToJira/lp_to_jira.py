@@ -1,6 +1,5 @@
-#!/usr/bin/python3
-# The purpose of lp-to-jira is to take a launchad bug ID and
-# create a new Entry in JIRA in a given project
+# The purpose of lp-to-jira is to take a launchad bug ID and create a new Entry
+# in JIRA in a given project
 
 
 import os
