@@ -98,7 +98,7 @@ class lp_bug():
             return ""
 
     def __repr__(self):
-        return self.dict().__str__()
+        return str(self.dict())
 
     def __str__(self):
         string = "LP: #{} : {}".format(self.id, self.title)
@@ -116,9 +116,8 @@ class lp_bug():
         return string
 
     def dict(self):
-        dict = {}
-        dict['id'] = self.id
-        dict['title'] = self.title
-        dict['packages'] = self.packages_info
-
-        return dict
+        return {
+            'id': self.id,
+            'title': self.title,
+            'packages': self.packages_info,
+        }

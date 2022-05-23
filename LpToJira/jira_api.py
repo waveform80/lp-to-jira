@@ -32,11 +32,12 @@ class jira_api():
             save_token = input('Do you want to save those credentials for future use or lp-to-jira? (Y/n) ')
             if save_token != 'n':
                 try:
-                    data = {}
-                    data['jira-server'] = self.server
-                    data['jira-login'] = self.login
-                    data['jira-token'] = self.token
+                    data = {
+                        'jira-server': self.server,
+                        'jira-login': self.login,
+                        'jira-token': self.token,
+                    }
                     with open(self.credstore,'w+') as f:
-                        json.dump(data,(f))
+                        json.dump(data, f)
                 except (FileNotFoundError, json.JSONDecodeError):
                     raise ValueError("JIRA API isn't initialized")
