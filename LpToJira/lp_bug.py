@@ -3,7 +3,7 @@
 
 ubuntu_devel = 'Kinetic'
 
-ubuntu_version = {
+ubuntu_versions = {
     ubuntu_devel: '22.10',
     'Jammy': '22.04',
     'Impish': '21.10',
@@ -42,7 +42,7 @@ class lp_bug():
             if " (Ubuntu" in task_name:
                 package_name = task_name.split()[0]
 
-                if package_name not in self.packages_info.keys():
+                if package_name not in self.packages_info:
                     self.packages_info[package_name] = {}
 
                 # Grab the Ubuntu serie our of the task name
@@ -50,13 +50,13 @@ class lp_bug():
                 serie = task_name[task_name.index("Ubuntu")+7:-1]
                 if serie == '':
                     serie = ubuntu_devel
-                elif serie not in ubuntu_version.keys():
+                elif serie not in ubuntu_versions:
                     continue
 
-                if "series" not in self.packages_info[package_name].keys():
+                if "series" not in self.packages_info[package_name]:
                     self.packages_info[package_name]["series"] = {}
 
-                if serie not in self.packages_info[package_name]["series"].keys():
+                if serie not in self.packages_info[package_name]["series"]:
                     self.packages_info[package_name]["series"][serie] = {}
 
                 # For each impacted package/serie, capture status
@@ -73,15 +73,15 @@ class lp_bug():
         return list of packages affected by this bug in a form of string list
         ['pkg1', 'pkg2' , 'pkg3']
         """
-        return list(self.packages_info.keys())
+        return list(self.packages_info)
 
     def affected_series(self, package):
         """
         Returns a list of string containing the series affected by a specific
         bug for a specific package: ['Impish', 'Focal', 'Bionic']
         """
-        if package in self.packages_info.keys():
-            return list(self.packages_info[package]['series'].keys())
+        if package in self.packages_info:
+            return list(self.packages_info[package]['series'])
         return []
 
     def affected_versions(self, package):
