@@ -5,12 +5,12 @@
 import sys
 import json
 import datetime
-
 from optparse import OptionParser
 
 from launchpadlib.launchpad import Launchpad
 from jira import JIRA
-from LpToJira.jira_api import jira_api
+
+from .jira_api import jira_api
 
 
 jira_server = ""

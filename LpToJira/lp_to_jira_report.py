@@ -5,16 +5,16 @@
 import os
 import json
 import datetime
-
 import argparse
 import textwrap
 
 from launchpadlib.launchpad import Launchpad
 from launchpadlib.credentials import UnencryptedFileCredentialStore
-
 from jira import JIRA
-from LpToJira.jira_api import jira_api
-from LpToJira.lp_bug import lp_bug, ubuntu_devel
+
+from .jira_api import jira_api
+from .lp_bug import lp_bug, ubuntu_devel
+
 
 jira_server = ""
 jira_project = ""
