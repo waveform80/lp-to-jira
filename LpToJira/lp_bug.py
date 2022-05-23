@@ -101,19 +101,17 @@ class lp_bug():
         return str(self.dict())
 
     def __str__(self):
-        string = "LP: #{} : {}".format(self.id, self.title)
-        string += "\nHeat: {}".format(self.heat)
+        lines = []
+        lines.append("LP: #{self.id} : {self.title}".format(self=self))
+        lines.append("Heat: {self.heat}".format(self=self))
         for pkg in self.affected_packages:
-            string += "\n - {}:".format(pkg)
+            lines.append(" - {pkg}:".format(pkg=pkg))
             for serie in self.affected_series(pkg):
-                string += "\n   - {} : {} ({})".\
-                    format(
-                        serie,
-                        self.package_detail(pkg, serie, "status"),
-                        self.package_detail(pkg, serie, "importance")
-                        )
-
-        return string
+                lines.append("   - {serie} : {status} ({importance})".format(
+                    serie=serie,
+                    status=self.package_detail(pkg, serie, "status"),
+                    importance=self.package_detail(pkg, serie, "importance")))
+        return '\n'.join(lines)
 
     def dict(self):
         return {
