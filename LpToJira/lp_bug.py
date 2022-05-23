@@ -92,10 +92,7 @@ class lp_bug():
         return [ubuntu_version.get(x) for x in self.affected_series(package)]
 
     def package_detail(self, package, serie, detail):
-        try:
-            return self.packages_info[package]["series"][serie][detail]
-        except KeyError:
-            return ""
+        return self.packages_info[package]["series"][serie].get(detail, '')
 
     def __repr__(self):
         return str(self.dict())
