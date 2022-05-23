@@ -19,7 +19,7 @@ jira_project = ""
 db_json = "lp_to_jira_db.json"
 
 def get_bug_id(summary):
-    "Extract the bug id from a jira title whivh would icnlude LP#"
+    "Extract the bug id from a jira title which would include LP#"
     id = ""
 
     if "LP#" in summary:
@@ -68,6 +68,7 @@ def build_db(jira_api, lp_api, project):
 
     return db
 
+
 def main():
     global jira_server
     usage = """\
@@ -109,7 +110,7 @@ Examples:
     print("\nFound %s issues" % len(jira_lp_db))
     # Saving DB to disk
     with open(db_json, 'w') as fp:
-            json.dump(jira_lp_db, fp, indent=2)
+        json.dump(jira_lp_db, fp, indent=2)
 
     has_changed = False
     while not has_changed:

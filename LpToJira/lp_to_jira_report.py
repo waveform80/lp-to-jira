@@ -33,7 +33,7 @@ series = ["Devel",
           "Xenial",
           "Trusty"]
 
-colummns = ["Jira ID",
+columns = ["Jira ID",
             "Summary",
             "Status",
             "LaunchPad ID",
@@ -67,8 +67,10 @@ def status_cell(status):
 
 
 def java_script():
-    'Sort a table https://www.w3schools.com/howto/howto_js_sort_table.asp'
-    'Addition of numeric boolean to allow sorting based on numbers'
+    """
+    Sort a table https://www.w3schools.com/howto/howto_js_sort_table.asp
+    Addition of numeric boolean to allow sorting based on numbers
+    """
     script = """\
     <script>
     function search() {
