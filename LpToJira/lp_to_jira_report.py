@@ -554,7 +554,7 @@ def merge_lp_data_with_jira_issues(jira, lp, issues, sync=False):
 def main(args=None):
     global jira_server
 
-    opt_parser = argparse.ArgumentParser(
+    parser = argparse.ArgumentParser(
             description="Report the status of all active LaunchPad bug "
                         "imported into a JIRA project with lp-to-jira",
             formatter_class=argparse.RawTextHelpFormatter,
@@ -566,32 +566,23 @@ def main(args=None):
                 lp-to-jira-report --html results.html FR
             ''')
         )
-    opt_parser.add_argument(
-        'project', type=str,
+    parser.add_argument(
+        'project',
         help="The JIRA project string key")
-
-    opt_parser.add_argument(
+    parser.add_argument(
         '--csv',
-        dest='csv',
-        help='export the results of the report into FILE in csv format',
-    )
-    opt_parser.add_argument(
+        help='export the results of the report into FILE in csv format')
+    parser.add_argument(
         '--html',
-        dest='html',
-        help='export the results of the report into FILE in html format',
-    )
-    opt_parser.add_argument(
+        help='export the results of the report into FILE in html format')
+    parser.add_argument(
         '--json',
-        dest='json',
-        help='export the results of the report into FILE in json format',
-    )
-    opt_parser.add_argument(
-        '--sync',
-        dest='sync', action='store_true',
-        help='Sync JIRA items with corresponding bugs in LP',
-    )
+        help='export the results of the report into FILE in json format')
+    parser.add_argument(
+        '--sync', action='store_true',
+        help='Sync JIRA items with corresponding bugs in LP')
 
-    opts = opt_parser.parse_args(args)
+    opts = parser.parse_args(args)
 
     jira_project = opts.project
 

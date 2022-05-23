@@ -193,103 +193,68 @@ def lp_to_jira_bug(lp, jira, bug, project_id, opts):
         bug.tags += [jira_issue.key.lower()]
         bug.lp_save()
 
+
 def main(args=None):
-    opt_parser = argparse.ArgumentParser(
+    parser = argparse.ArgumentParser(
         description="A script create JIRA issue from Launchpad bugs",
         formatter_class=argparse.RawTextHelpFormatter,
         epilog=textwrap.dedent('''\
         Examples:
-            lp-to-jira 3215487 FR
-            lp-to-jira -e 3215487 FR
-            lp-to-jira -l ubuntu-meeting 3215487 PR
-            lp-to-jira -s ubuntu -d 3 IQA
             lp-to-jira --no-lp-tag -c Network -E FS-543 123231 PR
             lp-to-jira -s ubuntu -t go-to-jira PR
             lp-to-jira -s ubuntu -t go-to-jira -t also-to-jira PR
             lp-to-jira -s ubuntu -t=-ignore-these PR
-        ''')
-    )
-    opt_parser.add_argument(
-        'bug', type=int,
+        '''))
+    parser.add_argument(
         # Somewhat hacky way to allow -s option to not require bug id
         # -s (sync) is an optional parameter that doesn't require bug id
-        default=0,
-        nargs='?',
+        'bug', type=int, default=0, nargs='?',
         help="The Launchpad numeric bug ID")
-    opt_parser.add_argument(
-        'project', type=str,
+    parser.add_argument(
+        'project',
         help="The JIRA project string key")
-    opt_parser.add_argument(
-        '-l',
-        '--label',
-        dest='label',
+    parser.add_argument(
+        '-l', '--label',
         help='Add LABEL to the JIRA issue after creation')
-    opt_parser.add_argument(
-        '-c',
-        '--component',
-        dest='component',
+    parser.add_argument(
+        '-c', '--component',
         help='Specify COMPONENT to assign the issue to')
-    opt_parser.add_argument(
-        '-E',
-        '--epic',
-        dest='epic',
+    parser.add_argument(
+        '-E', '--epic',
         help='Specify EPIC to link this new issue to')
-    opt_parser.add_argument(
-        '-e', '--exists',
-        dest='exists',
-        action='store_true',
+    parser.add_argument(
+        '-e', '--exists', action='store_true',
         help=textwrap.dedent('''
             Look if the Launchpad Bug has already been imported
             print the JIRA issue ID if found
-        ''')
-    )
-    opt_parser.add_argument(
-        '-s', '--sync_project_bugs',
-        dest='sync_project_bugs',
-        action='store',
-        type=str,
+        '''))
+    parser.add_argument(
+        '-s', '--sync-project-bugs',
         help=textwrap.dedent('''
             Adds all bugs from a specified LP Project to specified Jira board
             if they are not already on the Jira board.
             Use --days to narrow down bugs
-            ''')
-    )
-    opt_parser.add_argument(
-        '-d', '--days',
-        dest='days',
-        action='store',
-        type=int,
-        help='Only look for LP Bugs in the past n days'
-    )
-    opt_parser.add_argument(
-        '-t', '--tag',
-        dest='tags',
-        action='append',
-        type=str,
+        '''))
+    parser.add_argument(
+        '-d', '--days', type=int,
+        help='Only look for LP Bugs in the past n days')
+    parser.add_argument(
+        '-t', '--tag', dest='tags', action='append',
         help=textwrap.dedent('''
             Only look for LP Bugs with the specified tag(s). To exclude,
             prepend a '-', e.g. '-unwantedtag'
-            ''')
-    )
-    opt_parser.add_argument(
-        '--add-link-in-lp-desc',
-        dest='lp_link',
-        action='store_true',
-        help='Add JIRA link in LP Bug description'
-    )
-    opt_parser.add_argument(
-        '--no-lp-tag',
-        dest='no_lp_tag',
-        action='store_true',
-        help='Do not add tag to LP Bug'
-    )
+        '''))
+    parser.add_argument(
+        '--add-link-in-lp-desc', dest='lp_link', action='store_true',
+        help='Add JIRA link in LP Bug description')
+    parser.add_argument(
+        '--no-lp-tag', action='store_true',
+        help='Do not add tag to LP Bug')
 
-    opts = opt_parser.parse_args(args)
+    opts = parser.parse_args(args)
 
-    if (opts.bug == 0 and not opts.sync_project_bugs):
-        opt_parser.print_usage()
-        print('lp-to-jira: error: the follow argument is required: bug')
-        return 1
+    if opts.bug == 0 and not opts.sync_project_bugs:
+        parser.error('lp-to-jira: error: the follow argument is required: bug')
 
     # Connect to Launchpad API
     # TODO: catch exception if the Launchpad API isn't open

@@ -5,7 +5,7 @@
 import sys
 import json
 import datetime
-from optparse import OptionParser
+import argparse
 
 from launchpadlib.launchpad import Launchpad
 from jira import JIRA
@@ -69,7 +69,7 @@ def build_db(jira_api, lp_api, project):
     return db
 
 
-def main():
+def main(args=None):
     global jira_server
     usage = """\
 usage: lp-to-jira-monitor project-id
@@ -77,16 +77,12 @@ usage: lp-to-jira-monitor project-id
 Examples:
     lp-to-jira-monitor FR
     """
-    opt_parser = OptionParser(usage)
-    opts, args = opt_parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'project',
+        help="The JIRA project string key")
 
-    # # Make sure there's at least 1 arguments
-    if len(args) < 1:
-        opt_parser.print_usage()
-        return 1
-
-
-    jira_project = args[0]
+    opts = parser.parse_args(args)
 
     # 1. Initialize JIRA API
     print("Initialize JIRA API ...")
@@ -103,9 +99,9 @@ Examples:
         with open(db_json) as fp:
             jira_lp_db = json.load(fp)
         # TODO: check if there's new entry in JIRA that need to be added to the DB
-        # refresh_db(jira, lp, jira_project, jira_lp_db)
+        # refresh_db(jira, lp, opts.project, jira_lp_db)
     except (FileNotFoundError):
-        jira_lp_db = build_db(jira, lp, jira_project)
+        jira_lp_db = build_db(jira, lp, opts.project)
 
     print("\nFound %s issues" % len(jira_lp_db))
     # Saving DB to disk
