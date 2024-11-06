@@ -9,12 +9,16 @@ from jira import JIRA
 
 
 class JiraAPI():
-    def __init__(self, credstore=os.path.expanduser("~/.jira.token")):
-        snap_home = os.getenv("SNAP_USER_COMMON")
-        if snap_home:
-            self.credstore = "{}/.jira.token".format(snap_home)
-        else:
+    def __init__(self, credstore=None):
+        if credstore is not None:
             self.credstore = credstore
+        else:
+            snap_home = os.getenv("SNAP_USER_COMMON")
+            if snap_home:
+                self.credstore = "{}/.jira.token".format(snap_home)
+            else:
+                self.credstore = os.path.expanduser("~/.jira.token")
+
         try:
             with open(self.credstore) as f:
                 config = json.load(f)
