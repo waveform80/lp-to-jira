@@ -22,10 +22,10 @@ class JiraAPI():
         try:
             with open(self.credstore) as f:
                 config = json.load(f)
-                self.server = config['jira-server']
-                self.login = config['jira-login']
-                self.token = config['jira-token']
-        except (FileNotFoundError, json.JSONDecodeError):
+                self.server = str(config['jira-server'])
+                self.login = str(config['jira-login'])
+                self.token = str(config['jira-token'])
+        except (FileNotFoundError, KeyError, ValueError):
             print('JIRA Token information file {} could not be found or parsed.'.format(self.credstore))
             print('')
             gather_token = input('Do you want to enter your JIRA token information now? (Y/n) ')
