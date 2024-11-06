@@ -4,6 +4,7 @@
 
 import os
 import json
+from urllib.parse import urlparse
 
 from jira import JIRA
 
@@ -26,23 +27,35 @@ class JiraAPI():
                 self.login = str(config['jira-login'])
                 self.token = str(config['jira-token'])
         except (FileNotFoundError, KeyError, ValueError):
-            print('JIRA Token information file {} could not be found or parsed.'.format(self.credstore))
-            print('')
-            gather_token = input('Do you want to enter your JIRA token information now? (Y/n) ')
-            if gather_token == 'n':
+            self.prompt_for_credentials()
+
+    def prompt_for_credentials(self):
+        print('JIRA Token information file {} could not be found or parsed.'.format(self.credstore))
+        print('')
+        s = input('Do you want to enter your JIRA token information now? (Y/n) ')
+        if s.strip().lower() == 'n':
+            raise ValueError("JIRA API isn't initialized")
+        s = input('JIRA server address: ')
+        url = urlparse(s)
+        if not url.scheme:
+            url = url._replace(schema='https')
+        self.server = url.geturl()
+        s = input('JIRA email login: ')
+        # TODO Some rudimentary validation
+        self.login = s
+        api_url = 'https://id.atlassian.com/manage-profile/security/api-tokens'
+        s = input('JIRA API Token (see {api_url}): '.format(api_url=api_url))
+        # TODO Some rudimentary validation
+        self.token = s
+        s = input('Save these credentials for future use? (Y/n) ')
+        if s.strip().lower() != 'n':
+            try:
+                data = {
+                    'jira-server': self.server,
+                    'jira-login': self.login,
+                    'jira-token': self.token,
+                }
+                with open(self.credstore, 'w') as f:
+                    json.dump(data, f)
+            except (FileNotFoundError, json.JSONDecodeError):
                 raise ValueError("JIRA API isn't initialized")
-            self.server = input('Please enter your jira server address : ')
-            self.login = input('Please enter your email login for JIRA : ')
-            self.token = input('Please enter your JIRA API Token (see https://id.atlassian.com/manage-profile/security/api-tokens) : ')
-            save_token = input('Do you want to save those credentials for future use or lp-to-jira? (Y/n) ')
-            if save_token != 'n':
-                try:
-                    data = {
-                        'jira-server': self.server,
-                        'jira-login': self.login,
-                        'jira-token': self.token,
-                    }
-                    with open(self.credstore, 'w') as f:
-                        json.dump(data, f)
-                except (FileNotFoundError, json.JSONDecodeError):
-                    raise ValueError("JIRA API isn't initialized")
