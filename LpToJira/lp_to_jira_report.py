@@ -12,7 +12,7 @@ from launchpadlib.launchpad import Launchpad
 from launchpadlib.credentials import UnencryptedFileCredentialStore
 from jira import JIRA
 
-from .jira_api import jira_api
+from .jira_api import JiraAPI
 from .lp_bug import lp_bug, ubuntu_devel
 
 
@@ -587,7 +587,7 @@ def main(args=None):
     jira_project = opts.project
 
     # 1. Initialize JIRA API
-    api = jira_api()
+    api = JiraAPI()
     jira_server = api.server
     jira = JIRA(api.server, basic_auth=(api.login, api.token))
 

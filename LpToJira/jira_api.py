@@ -8,7 +8,7 @@ import json
 from jira import JIRA
 
 
-class jira_api():
+class JiraAPI():
     def __init__(self, credstore=os.path.expanduser("~/.jira.token")):
         snap_home = os.getenv("SNAP_USER_COMMON")
         if snap_home:

@@ -10,7 +10,7 @@ import argparse
 from launchpadlib.launchpad import Launchpad
 from jira import JIRA
 
-from .jira_api import jira_api
+from .jira_api import JiraAPI
 
 
 jira_server = ""
@@ -86,7 +86,7 @@ Examples:
 
     # 1. Initialize JIRA API
     print("Initialize JIRA API ...")
-    api = jira_api()
+    api = JiraAPI()
     jira_server = api.server
     jira = JIRA(api.server, basic_auth=(api.login, api.token))
 

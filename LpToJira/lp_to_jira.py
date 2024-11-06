@@ -11,7 +11,7 @@ from launchpadlib.launchpad import Launchpad
 from launchpadlib.credentials import UnencryptedFileCredentialStore
 from jira import JIRA, JIRAError
 
-from .jira_api import jira_api
+from .jira_api import JiraAPI
 
 
 # TODO: paramaterize this, for now we just hardcode
@@ -272,7 +272,7 @@ def main(args=None):
 
     # Connect to the JIRA API
     try:
-        api = jira_api()
+        api = JiraAPI()
     except ValueError:
         return "ERROR: Cannot initialize JIRA API."
 
