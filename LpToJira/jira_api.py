@@ -42,7 +42,7 @@ class JiraAPI():
                         'jira-login': self.login,
                         'jira-token': self.token,
                     }
-                    with open(self.credstore,'w+') as f:
+                    with open(self.credstore, 'w') as f:
                         json.dump(data, f)
                 except (FileNotFoundError, json.JSONDecodeError):
                     raise ValueError("JIRA API isn't initialized")
