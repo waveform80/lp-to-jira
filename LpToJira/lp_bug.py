@@ -89,7 +89,7 @@ class lp_bug():
         Simply return all the affected version for a specific package affected
         by this bug. Convert affected serie into a version number
         """
-        return [ubuntu_version.get(x) for x in self.affected_series(package)]
+        return [ubuntu_versions.get(x) for x in self.affected_series(package)]
 
     def package_detail(self, package, serie, detail):
         return self.packages_info[package]["series"][serie].get(detail, '')

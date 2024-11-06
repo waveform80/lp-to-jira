@@ -1,6 +1,6 @@
 import pytest
 
-from LpToJira.lp_bug import lp_bug, ubuntu_devel, ubuntu_version
+from LpToJira.lp_bug import lp_bug, ubuntu_devel, ubuntu_versions
 
 
 def test_bug_init_bad_lp_api():
@@ -63,13 +63,13 @@ def test_affected_versions(lp_api):
     bug = lp_bug(3, lp_api)
 
     versions = bug.affected_versions('systemd')
-    assert versions == [ubuntu_version[ubuntu_devel], '20.04', '18.04']
+    assert versions == [ubuntu_versions[ubuntu_devel], '20.04', '18.04']
 
     versions = bug.affected_versions('vim')
     assert versions == []
 
     versions = bug.affected_versions('glibc')
-    assert versions == [ubuntu_version[ubuntu_devel], '20.04', '18.04']
+    assert versions == [ubuntu_versions[ubuntu_devel], '20.04', '18.04']
 
 
 def test_package_detail(lp_api):
